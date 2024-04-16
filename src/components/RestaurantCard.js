@@ -1,5 +1,4 @@
   import CDN_URL from "../utils/constants"
-  import resList from "../utils/MockData";
 
   const RestaurantCard = (props) => {
     const { resData } = props;
@@ -9,7 +8,7 @@
       cloudinaryImageId,
       avgRating,
       cuisines,
-      costForTwo,
+      costForTwo, 
       sla
 
     } = resData;

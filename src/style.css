@@ -135,3 +135,20 @@ background-color: #e1ecce;
     text-align: center;
     
 }
+
+
+.shimmer-cont {
+    display: flex;
+
+    flex-wrap: wrap; /* Allow cards to wrap to the next line */
+    
+}
+
+.shimmer-card {
+    width: 220px; /* Set the width to your desired size */
+    height: 300px; /* Set the height to the same value as width */
+    padding: 8px;
+    margin: 20px;
+    border-radius: 10px;
+    background-color: rgba(237, 234, 234, 0.889);
+}

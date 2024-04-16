@@ -1,9 +1,16 @@
 import RestaurantCard from "./RestaurantCard";
 // import resList from "../utils/MockData";
 import { useState, useEffect } from "react";
+import Card from "./shimmer";
 
 const Body = () => {
   const [restaurantList, setRestaurantList] = useState([]);
+
+  const [searchText, setSearchText] = useState("");
+
+  const [filteredRestaurant, setFilteredRestaurant] = useState([]);
+
+  // console.log('anuj')
 
   useEffect(() => {
     fetchData();
@@ -17,42 +24,65 @@ const Body = () => {
     const json = await data.json();
 
     setRestaurantList(
-      json.data.cards[4].card.card.gridElements.infoWithStyle.restaurants
+      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+    );
+    setFilteredRestaurant(
+      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
   };
 
+  const handleFilter = () => {
+    const filteredList = restaurantList.filter(
+      (restaurant) => parseFloat(restaurant.avgRating) > 4.0
+    );
+    setFilteredRestaurant(filteredList);
+  };
 
-const handleFilter = () => {
-  const filteredList = restaurantList.filter(
-    (restaurant) => restaurant.rating > 4
+  const handleSearch = () => {
+    const filteredResturants = restaurantList.filter((res) =>
+      res?.info.name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    // console.log(searchText)
+    setFilteredRestaurant(filteredResturants);
+  };
+
+  // conditinal rendering-> rendering on the basis of conditional rendering.
+
+  return restaurantList.length === 0 ? (
+    <>
+      <Card />
+    </>
+  ) : (
+    <>
+      <div className="filter">
+        <div className="search-container">
+          <input
+            className="searchInput"
+            type="text"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+
+          <button onClick={handleSearch}>search</button>
+
+          <button className="filter-btn" onClick={handleFilter}>
+            Top Rated Restaurant
+          </button>
+        </div>
+      </div>
+
+      <div className="body">
+        <div className="res-container">
+          {filteredRestaurant.map((restaurant) => (
+            <RestaurantCard
+              key={restaurant.info.id}
+              resData={restaurant.info}
+            />
+          ))}
+        </div>
+      </div>
+    </>
   );
-  setRestaurantList(filteredList);
-};
-
-// conditinal rendering-> rendering on the basis of conditional rendering.
-
-return restaurantList.length === 0 ? (
-  <h1>Loading..............</h1>
-) : (
-  <>
-    <div className="filter">
-      <div className="search-container">
-        <input className="searchInput" type="text" />
-        <button className="filter-btn" onClick={handleFilter}>
-          Top Rated Restaurant
-        </button>
-      </div>
-    </div>
-
-    <div className="body">
-      <div className="res-container">
-        {restaurantList.map((restaurant) => (
-          <RestaurantCard key={restaurant.info.id} resData={restaurant.info} />
-        ))}
-      </div>
-    </div>
-  </>
-)
 };
 
 export default Body;
