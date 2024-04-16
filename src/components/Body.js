@@ -6,9 +6,10 @@ import Card from "./shimmer";
 const Body = () => {
   const [restaurantList, setRestaurantList] = useState([]);
 
-  const [searchText, setSearchText] = useState("");
 
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
+
+  const [searchText, setSearchText] = useState("");
 
   // console.log('anuj')
 
@@ -26,24 +27,25 @@ const Body = () => {
     setRestaurantList(
       json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
     );
+
     setFilteredRestaurant(
-      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
+      json.data.cards[4].card.card.gridElements.infoWithStyle.restaurants
     );
   };
 
   const handleFilter = () => {
     const filteredList = restaurantList.filter(
-      (restaurant) => parseFloat(restaurant.avgRating) > 4.0
+      (restaurant) => restaurant?.info.avgRating > 4.0
     );
     setFilteredRestaurant(filteredList);
   };
 
-  const handleSearch = () => {
-    const filteredResturants = restaurantList.filter((res) =>
+  const handleSearch = () => {  
+    const filteredRes = restaurantList.filter((res) =>
       res?.info.name.toLowerCase().includes(searchText.toLowerCase())
     );
     // console.log(searchText)
-    setFilteredRestaurant(filteredResturants);
+    setFilteredRestaurant(filteredRes);
   };
 
   // conditinal rendering-> rendering on the basis of conditional rendering.
@@ -54,8 +56,9 @@ const Body = () => {
     </>
   ) : (
     <>
+          <div className="body">
+
       <div className="filter">
-        <div className="search-container">
           <input
             className="searchInput"
             type="text"
@@ -66,12 +69,10 @@ const Body = () => {
           <button onClick={handleSearch}>search</button>
 
           <button className="filter-btn" onClick={handleFilter}>
-            Top Rated Restaurant
+            Top Rated Restaurant 
           </button>
-        </div>
       </div>
 
-      <div className="body">
         <div className="res-container">
           {filteredRestaurant.map((restaurant) => (
             <RestaurantCard
